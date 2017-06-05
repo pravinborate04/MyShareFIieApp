@@ -2,6 +2,7 @@ package com.pravin.mysharefileapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.pravin.mysharefileapp.file_share.FileReceiver;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 
 public class ReceiverActivity extends AppCompatActivity {
@@ -40,7 +43,6 @@ public class ReceiverActivity extends AppCompatActivity {
                         progressDoalog.show();
                     }
                     progressDoalog.setProgress((int)msg.obj);
-                    Log.e("processActivity",msg.obj+"");
                     break;
                 case FileReceiver.LISTENING :
                     Toast.makeText(ReceiverActivity.this,"Listening...",Toast.LENGTH_SHORT).show();
@@ -59,12 +61,15 @@ public class ReceiverActivity extends AppCompatActivity {
                     progressDoalog.dismiss();
                     Toast.makeText(ReceiverActivity.this,file.getName() + " Received!",Toast.LENGTH_SHORT).show();
                     Toast.makeText(ReceiverActivity.this,"Stored in " + file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(ReceiverActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     fileReceiver.close();
                     break;
 
                 case FileReceiver.RECEIVE_ERROR :
                     Toast.makeText(ReceiverActivity.this,"Error occured : " + (String)msg.obj,Toast.LENGTH_SHORT).show();
-                    fileReceiver.close();
+                    //fileReceiver.close();
                     break;
             }
         }
@@ -90,8 +95,17 @@ public class ReceiverActivity extends AppCompatActivity {
         }
 
         WifiConfiguration netConfig = new WifiConfiguration();
+        String hostpostName=PreferenceManager.getInstance().getStringValue(PreferenceManager.USER_NAME)+"MyShareApp";
+        byte[] data = new byte[0];
+        String base64="";
+        try {
+            data = hostpostName.getBytes("UTF-8");
+            base64 = Base64.encodeToString(data, Base64.DEFAULT);
 
-        netConfig.SSID = PreferenceManager.getInstance().getStringValue(PreferenceManager.USER_NAME);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        netConfig.SSID = base64;
         netConfig.preSharedKey="123";
        // netConfig.BSSID="HOTSPOT";
         netConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);

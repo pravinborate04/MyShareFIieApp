@@ -71,6 +71,9 @@ public class FileDirectoryActivity extends AppCompatActivity {
                         progressDoalog.dismiss();
                     }
                     Toast.makeText(FileDirectoryActivity.this, "File Sent!", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(FileDirectoryActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     fileSender.close();
                     // bPickFile.setEnabled(true);
                     break;
@@ -96,7 +99,7 @@ public class FileDirectoryActivity extends AppCompatActivity {
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
         if (getIntent() != null) {
-            port = getIntent().getIntExtra("PORT", 0);
+            port = getIntent().getIntExtra("PORT", 2222);
             Log.e("PORT", port + "");
         }
         // getActionBar().setDisplayHomeAsUpEnabled(true);

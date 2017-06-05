@@ -9,9 +9,11 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +57,21 @@ public class WifiOnlyBroadCastReceiver extends BroadcastReceiver {
                         // WPA or WPA2 Network
                     } else {
                         // Open Network
+
+
                         Log.e("our device",scanResult.toString());
-                        devices.add(scanResult);
+                        String ssid=scanResult.SSID;
+                        byte[] data1 = Base64.decode(ssid, Base64.DEFAULT);
+                        String text1 = null;
+                        try {
+                            text1 = new String(data1, "UTF-8");
+                            if(text1.contains("MyShareApp"))
+                            devices.add(scanResult);
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                 }

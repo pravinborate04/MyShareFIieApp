@@ -10,8 +10,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -23,9 +21,6 @@ public class SenderThread extends Thread {
     private Messenger messenger;
     private Socket senderSocket;
     private int PKT_SIZE = 60*1024;
-
-
-
 
     public SenderThread(InetAddress receiverIP, int port, File fileToSend, Messenger messenger){
         this.receiverIP = receiverIP;

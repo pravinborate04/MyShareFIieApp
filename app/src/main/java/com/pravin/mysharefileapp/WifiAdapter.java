@@ -6,12 +6,14 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
@@ -38,7 +40,16 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.MyWifiViewHold
 
     @Override
     public void onBindViewHolder(MyWifiViewHolder holder, int position) {
-        holder.txtSingleRowDevice.setText(results.get(position).SSID);
+        String ssid=results.get(position).SSID;
+        byte[] data1 = Base64.decode(ssid, Base64.DEFAULT);
+        String text1 = null;
+        try {
+            text1 = new String(data1, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String username=text1.replace("MyShareApp","");
+        holder.txtSingleRowDevice.setText(username);
         holder.posn=position;
     }
 
@@ -72,7 +83,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.MyWifiViewHold
                             break;
                         }
                     }
-                    mContext.startActivity(new Intent(mContext,SendToActivity.class));
+                    mContext.startActivity(new Intent(mContext,FileDirectoryActivity.class));
                 }
             });
         }

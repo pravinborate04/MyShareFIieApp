@@ -85,8 +85,8 @@ public class FileReceiver {
 
     public void getFile(){
 
-        int port = getRandomPort();
-        //int port = 2222;
+       // int port = getRandomPort();
+        int port = 2222;
         if(mDebug)
         Log.i("FileReceiver","Port : " + port);
 

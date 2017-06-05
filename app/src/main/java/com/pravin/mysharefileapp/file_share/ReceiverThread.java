@@ -37,6 +37,7 @@ public class ReceiverThread extends Thread {
 
         try {
             listenerSocket = new ServerSocket(port);
+            listenerSocket.setReuseAddress(true);
 
             message = Message.obtain();
             message.what = FileReceiver.CODE;
@@ -71,19 +72,15 @@ public class ReceiverThread extends Thread {
 
             // Read File Size
             long fileSize = in.readLong();
-            long fileSize1 = in.readLong();
             int totalLength = 0;
             int length = 0;
             byte[] receiveData = new byte[PKT_SIZE];
 
             long startTime = System.currentTimeMillis();
-            int lengthTWO=   in.available();
-           // Log.e("fileSize "+fileSize,"fileSize >"+fileSize);
             long tempSize=fileSize;
             // Get the file data
             while( fileSize>0 && ( ( length = in.read( receiveData,0,(int) Math.min(receiveData.length,fileSize) ))!= -1) )
             {
-                //Log.e("totalLength "+totalLength,"fileSize >"+tempSize);
                 dout.write(receiveData, 0, length);
 
                 totalLength += length;

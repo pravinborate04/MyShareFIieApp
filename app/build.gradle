@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:24.2.0'
     testCompile 'junit:junit:4.12'
+    compile 'pl.bclogic:pulsator4droid:1.0.3'
 }
